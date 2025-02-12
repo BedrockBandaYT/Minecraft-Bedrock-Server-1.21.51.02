@@ -3,35 +3,19 @@ version: '3.8'
 x-common:
 
   database:
-
     &db-environment
-
-    # Do not remove the "&db-password" from the end of the line below, it is important
     MYSQL_PASSWORD: &db-password "sgyy"
     MYSQL_ROOT_PASSWORD: "sgyt"
 
   panel:
-
     &panel-environment
-
-    # This URL should be the URL that your reverse proxy routes to the panel server
     APP_URL: "https://pterodactyl.example.com"
-
-    # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
     APP_TIMEZONE: "UTC"
-
     APP_SERVICE_AUTHOR: "noreply@example.com"
-
-    TRUSTED_PROXIES: "*" # Set this to your proxy IP
-
-    # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
-    # to generate an SSL certificate for the Panel.
-    # LE_EMAIL: ""
+    TRUSTED_PROXIES: "*"
 
   mail:
-
     &mail-environment
-
     MAIL_FROM: "noreply@example.com"
     MAIL_DRIVER: "smtp"
     MAIL_HOST: "mail"
@@ -39,12 +23,6 @@ x-common:
     MAIL_USERNAME: ""
     MAIL_PASSWORD: ""
     MAIL_ENCRYPTION: "true"
-
-# ------------------------------------------------------------------------------------------
-# DANGER ZONE BELOW
-# The remainder of this file likely does not need to be changed. Please only make modifications
-# below if you understand what you are doing.
-# 
 
 services:
 
@@ -78,7 +56,8 @@ services:
       - "/srv/pterodactyl/certs/:/etc/letsencrypt/"
       - "/srv/pterodactyl/logs/:/app/storage/logs"
     environment:
-      <<: [*panel-environment, *mail-environment]
+      <<: *panel-environment
+      <<: *mail-environment
       DB_PASSWORD: *db-password
       APP_ENV: "production"
       APP_ENVIRONMENT_ONLY: "false"
